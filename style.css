@@ -31,7 +31,7 @@ body {
 
 #restart {
   border-radius: 5px;
-  padding: 2px 5px;
+  padding: 5px 5px;
   color: #B5AEB5;
   background: #F5F1F0;
   font-size: 12px;
@@ -44,5 +44,5 @@ body {
 }
 
 #restart:hover {
-  background: #D6D6D6;
+  background-color: pink;
 }

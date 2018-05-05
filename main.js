@@ -9,10 +9,68 @@ $(document).ready(function() {
     ['','','']
   ];
 
+  //check for winner
   function checkGameOver(board) {
-    checkRows(board);
-    checkColumns(board);
-    checkDiagonals(board);
+    if (checkRows(board)) return checkRows(board);
+    if (checkColumns(board)) return checkColumns(board);
+    if (checkDiagonals(board)) return checkDiagonals(board);
+    return stillSpace(board);
+  }
+
+  //logic for computer AI using minmax algorithm
+  function minmax(newBoard, depth, turn) {
+    //if there are still moves left in the game
+    if (checkGameOver(newBoard) === false) {
+      //container for possible moves with scores
+      const results = [];
+      for (var i = 0; i < 3; i++) {
+        for (var j = 0; j < 3; j++) {
+          //make copy of board to avoid altering actual board
+          const boardCopy = _.cloneDeep(newBoard);
+          if (boardCopy[i][j] !== "") continue;
+          boardCopy[i][j] = turn;
+          //recursive call until you reach last possible move
+          let result = minmax(boardCopy, depth + 1, turn === player ? computer : player);
+          results.push(
+            { 
+              score: result,
+              square: {
+                i: i,
+                j: j
+              }
+            }
+          );
+        }
+      }
+      //search for max result 
+      if (turn === computer) {
+        const max = Math.max.apply(Math,results.map(function(ele) { return ele.score;}));
+        const maxDetails = results.find(function(ele) { return ele.score == max; });
+        if (depth === 0) {
+          return maxDetails.square;
+        } else {
+          return max;
+        }
+      } else {
+        const min = Math.min.apply(Math,results.map(function(ele) { return ele.score;}));
+        const minDetails = results.find(function(ele) { return ele.score == min; });
+        if (depth === 0) {
+          return minDetails.square;
+        } else {
+          return min;
+        }
+      }
+    } else if (checkGameOver(newBoard) === player) { // <-- player won
+      return depth - 10;
+    } else if (checkGameOver(newBoard) === computer) { // <-- computer won
+      return 10 - depth;
+    } else if (checkGameOver(newBoard) === null) { // <-- tie
+      return 0;
+    } 
+  }
+
+  function computerMove() {
+    return minmax(board, 0, computer);
   }
 
   $('.square').click(function() {
@@ -24,6 +82,21 @@ $(document).ready(function() {
     const j = $(this).data('j');
     board[i][j] = player;
 
+    //check if game over or computer moves
+    if (checkGameOver(board)) {
+      alert('game over: ' + checkGameOver(board));
+    } else if(checkGameOver(board) === null) {
+      alert('game over: tie!');
+    } else {
+      const move = computerMove();
+      console.log('inside' + checkGameOver(board));
+      console.log("move:" + move);
+      board[move.i][move.j] = computer;
+      $('.square[data-i=' + move.i + '][data-j=' + move.j + ']').html(computer);
+      if (checkGameOver(board)) {
+        alert('game over: ' + checkGameOver(board));
+      }
+    }
+    
   });
-
 });

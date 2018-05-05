@@ -24,3 +24,9 @@ describe('Diagonals', function(){
     assert.equal(f.checkDiagonals(board), null);
   });
 });
+
+describe('Empty Spaces', function(){
+  it('should return null', function(){
+    assert.equal(f.stillSpace(board), null);
+  });
+});
