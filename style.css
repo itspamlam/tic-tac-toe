@@ -29,9 +29,52 @@ body {
   background-color: pink;
 }
 
+.game-over {
+  visibility: hidden;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.mask {
+  background-color: grey;
+  opacity: 0.4;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.content {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.winner-container {
+  width: 250px;
+  height: 200px;
+  margin-top: -350px;
+  margin-left: -45px;
+  background-color: pink;
+}
+
+.winner-text {
+  margin-top: 25%;
+}
+
 #restart {
   border-radius: 5px;
   padding: 5px 5px;
+  margin-top: 25px;
   color: #B5AEB5;
   background: #F5F1F0;
   font-size: 12px;
@@ -44,5 +87,5 @@ body {
 }
 
 #restart:hover {
-  background-color: pink;
+  background-color: grey;
 }

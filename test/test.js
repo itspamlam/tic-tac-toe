@@ -7,6 +7,8 @@ const board = [
   ['','','']
 ];
 
+const gameOver = null;
+
 describe('Rows', function(){
   it('should return X', function(){
     assert.equal(f.checkRows(board), 'X');
@@ -28,5 +30,11 @@ describe('Diagonals', function(){
 describe('Board Full', function(){
   it('should return false', function(){
     assert.equal(f.boardFull(board), false);
+  });
+});
+
+describe('Set Result', function() {
+  it('should show tied result', function() {
+    assert.equal(f.setWinText(gameOver), "CAT'S GAME");
   });
 });

@@ -74,6 +74,11 @@ $(document).ready(function() {
     return minmax(board, 0, computer);
   }
 
+  function showResult(text) {
+    $('.winner-text').text(text);
+    $('.game-over').css('visibility', 'visible');
+  }
+
   $('.square').click(function() {
     //when square is clicked, change it to player symbol
     $(this).html(player);
@@ -87,17 +92,28 @@ $(document).ready(function() {
     const gameOver = checkGameOver(board); 
 
     if (gameOver) {
-      alert('game over: ' + gameOver);
+      const text = setWinText(gameOver);
+      showResult(text);
     } else if(gameOver === null) {
-      alert('game over: tie!');
+      const text = setWinText(gameOver);
+      showResult(text);
     } else {
       const move = computerMove();
       board[move.i][move.j] = computer;
       $('.square[data-i=' + move.i + '][data-j=' + move.j + ']').html(computer);
-      if (gameOver) {
-        alert('game over: ' + gameOver);
+      console.log('computer moved: ' + gameOver);
+
+      //check for game over again
+      const newCheck = checkGameOver(board);
+      if (newCheck) {
+        const text = setWinText(newCheck);
+        showResult(text);
       }
     }
-    
   });
+
+  $('#restart').click(function() {
+    location.reload();
+  });
+
 });

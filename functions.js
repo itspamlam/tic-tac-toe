@@ -45,9 +45,23 @@ function boardFull(board) {
   return null;
 }
 
+function setWinText(gameOver) {
+  let text = "";
+  
+  if (gameOver === null) {
+    text = "CAT'S GAME";
+  } else if (gameOver === 'O') {
+    text = "OOPS! YOU LOST.";
+  } else if (gameOver === 'X') {
+    text = "NOT GOING TO HAPPEN"
+  }
+  return text;
+}
+
 module.exports = { 
   checkRows: checkRows,
   checkColumns: checkColumns,
   checkDiagonals: checkDiagonals,
-  boardFull: boardFull
+  boardFull: boardFull,
+  setWinText: setWinText
 };
