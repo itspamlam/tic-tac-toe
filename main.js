@@ -101,7 +101,6 @@ $(document).ready(function() {
       const move = computerMove();
       board[move.i][move.j] = computer;
       $('.square[data-i=' + move.i + '][data-j=' + move.j + ']').html(computer);
-      console.log('computer moved: ' + gameOver);
 
       //check for game over again
       const newCheck = checkGameOver(board);
