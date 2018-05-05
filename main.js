@@ -14,13 +14,14 @@ $(document).ready(function() {
     if (checkRows(board)) return checkRows(board);
     if (checkColumns(board)) return checkColumns(board);
     if (checkDiagonals(board)) return checkDiagonals(board);
-    return stillSpace(board);
+    return boardFull(board);
   }
 
   //logic for computer AI using minmax algorithm
   function minmax(newBoard, depth, turn) {
+    const gameOver = checkGameOver(newBoard);
     //if there are still moves left in the game
-    if (checkGameOver(newBoard) === false) {
+    if (gameOver === false) {
       //container for possible moves with scores
       const results = [];
       for (var i = 0; i < 3; i++) {
@@ -60,11 +61,11 @@ $(document).ready(function() {
           return min;
         }
       }
-    } else if (checkGameOver(newBoard) === player) { // <-- player won
+    } else if (gameOver === player) { // <-- player won
       return depth - 10;
-    } else if (checkGameOver(newBoard) === computer) { // <-- computer won
+    } else if (gameOver === computer) { // <-- computer won
       return 10 - depth;
-    } else if (checkGameOver(newBoard) === null) { // <-- tie
+    } else if (gameOver === null) { // <-- tie
       return 0;
     } 
   }
@@ -83,18 +84,18 @@ $(document).ready(function() {
     board[i][j] = player;
 
     //check if game over or computer moves
-    if (checkGameOver(board)) {
-      alert('game over: ' + checkGameOver(board));
-    } else if(checkGameOver(board) === null) {
+    const gameOver = checkGameOver(board); 
+
+    if (gameOver) {
+      alert('game over: ' + gameOver);
+    } else if(gameOver === null) {
       alert('game over: tie!');
     } else {
       const move = computerMove();
-      console.log('inside' + checkGameOver(board));
-      console.log("move:" + move);
       board[move.i][move.j] = computer;
       $('.square[data-i=' + move.i + '][data-j=' + move.j + ']').html(computer);
-      if (checkGameOver(board)) {
-        alert('game over: ' + checkGameOver(board));
+      if (gameOver) {
+        alert('game over: ' + gameOver);
       }
     }
     
