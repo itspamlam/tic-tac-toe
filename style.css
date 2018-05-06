@@ -1,3 +1,7 @@
+header {
+  font-size: 56px;
+
+}
 body {
   margin: 0;
   background-color: white;
@@ -10,18 +14,20 @@ body {
   height: 450px;
   margin: 15px auto;
   padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .square {
-  width: 125px;
-  height: 125px;
-  box-sizing: border-box;
-  float: left;
-  margin: 5px;
+  width: 32%;
+  height: 32%;
+  line-height: 125px;
   background-color: #F5F1F0;
   border-radius: 5px;
+  display: table-cell;
+  vertical-align: middle;
   text-align: center;
-  line-height: 100px;
   cursor: pointer;
 }
 
@@ -62,8 +68,6 @@ body {
 .winner-container {
   width: 250px;
   height: 200px;
-  margin-top: -350px;
-  margin-left: -45px;
   background-color: pink;
 }
 
