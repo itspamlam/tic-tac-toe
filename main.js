@@ -81,12 +81,16 @@ $(document).ready(function() {
 
   $('.square').click(function() {
     //when square is clicked, change it to player symbol
-    $(this).html(player);
-
-    //also save selection to board
-    const i = $(this).data('i');
-    const j = $(this).data('j');
-    board[i][j] = player;
+    if ($(this).html() === '') {
+      $(this).html(player);
+  
+      //also save selection to board
+      const i = $(this).data('i');
+      const j = $(this).data('j');
+      board[i][j] = player;
+    } else {
+      return;
+    }
 
     //check if game over or computer moves
     const gameOver = checkGameOver(board); 

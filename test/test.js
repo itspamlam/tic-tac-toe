@@ -60,7 +60,7 @@ describe('Board Full', function() {
     it('should return false', function() {
       assert.equal(f.boardFull(board), false);
     });
-  });
+   });
 });
 
 describe('Set Result', function() {
