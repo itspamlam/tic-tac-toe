@@ -80,7 +80,7 @@ $(document).ready(function() {
   }
 
   $('.square').click(function() {
-    //when square is clicked, change it to player symbol
+    //when square is clicked, change it to player symbol if it is empty
     if ($(this).html() === '') {
       $(this).html(player);
   
