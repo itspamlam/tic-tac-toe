@@ -3,49 +3,53 @@ const f = require('../functions.js');
 
 describe('Rows', function() {
   context('when X wins', function() {
+    const player = 'X';
     const board = [
-      ['X','X','X'],
-      ['','O',''],
-      ['O','','']
+      ['X', 'X', 'X'],
+      [undefined, 'O', undefined],
+      ['O', undefined, undefined]
     ];
-    it('should return X', function() {
-      assert.equal(f.checkRows(board), 'X');
+    it('should return true', function() {
+      assert.equal(f.checkRows(board, player), true);
     });
   });
   context('when O wins', function() {
+    const player = 'O';
     const board = [
-      ['','X',''],
-      ['O','O','O'],
-      ['','X','']
+      [undefined, 'X', undefined],
+      ['O', 'O', 'O'],
+      [undefined, 'X', undefined]
     ];
-    it('should return O', function() {
-      assert.equal(f.checkRows(board), 'O');
+    it('should return true', function() {
+      assert.equal(f.checkRows(board, player), true);
     });
   });
 });
 
 describe('Columns', function() {
   context('when O wins', function() {
+    const player = 'O';
     const board = [
-      ['O','X','X'],
-      ['O','','O'],
-      ['O','X','']
+      ['O', 'X', 'X'],
+      ['O', undefined, 'O'],
+      ['O', 'X', undefined]
     ];
-    it('should return null', function() {
-      assert.equal(f.checkColumns(board), 'O');
+    it('should return true', function() {
+      assert.equal(f.checkColumns(board, player), true);
     });
   });
 });
 
 describe('Diagonals', function() {
   context("when O wins \\", function() {
+    const player = 'O';
     const board = [
-      ['O','X','X'],
-      ['','O',''],
+      ['O', 'X', 'X'],
+      [undefined, 'O', undefined],
       ['O','X','O']
     ];
-    it('should return O', function() {
-      assert.equal(f.checkDiagonals(board), 'O');
+    it('should return true', function() {
+      assert.equal(f.checkDiagonals(board, player), true);
     });
   });
 });
@@ -53,33 +57,12 @@ describe('Diagonals', function() {
 describe('Board Full', function() {
   context('when the board is not full yet', function() {
     const board = [
-      ['O','X','X'],
-      ['','O',''],
-      ['O','X','O']
+      ['O', 'X', 'X'],
+      [undefined, 'O', undefined],
+      ['O', 'X', 'O']
     ];
     it('should return false', function() {
       assert.equal(f.boardFull(board), false);
     });
    });
-});
-
-describe('Set Result', function() {
-  context('when no one wins', function() {
-    const gameOver = null;
-    it("should return CAT'S GAME", function() {
-      assert.equal(f.setWinText(gameOver), "CAT'S GAME");
-    });
-  });
-  context('when X wins', function() {
-    const gameOver = 'X';
-    it('should return NOT GOING TO HAPPEN', function() {
-      assert.equal(f.setWinText(gameOver), 'NOT GOING TO HAPPEN');
-    });
-  });
-  context('when O wins', function() {
-    const gameOver = 'O';
-    it('should return OOPS! YOU LOST.', function() {
-      assert.equal(f.setWinText(gameOver), 'OOPS! YOU LOST.');
-    });
-  });
 });
