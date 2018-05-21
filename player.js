@@ -14,5 +14,4 @@
   } else {
     window.Player = Player;
   }
-
 })();

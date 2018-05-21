@@ -12,8 +12,4 @@ To run tests, clone the repo and then install the test dependencies:
 $ npm install
 ```
 
-Then, run tests:
-
-```
-$ npm test
-```
+Then, open test.html.

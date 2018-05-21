@@ -6,11 +6,8 @@
       [undefined, undefined, undefined]
     ];
     this.result = undefined;
+    this.eventHandlers = {};
 
-    const eventTarget = document.createTextNode(null);
-    this.addEventListener = eventTarget.addEventListener.bind(eventTarget);
-    this.removeEventListener = eventTarget.removeEventListener.bind(eventTarget);
-    this.dispatchEvent = eventTarget.dispatchEvent.bind(eventTarget);
   }
 
   Board.TIE = 'CATSGAME';
@@ -89,6 +86,16 @@
     }
   }
 
+  Board.prototype.addEventListener = function(eventName, callback) {
+    this.eventHandlers[eventName] = callback;
+  }
+
+  Board.prototype.dispatchEvent = function(eventName) {
+    if (this.eventHandlers[eventName]) {
+      this.eventHandlers[eventName]();
+    }
+  }
+
   Board.prototype.move = function(turn, row, col) {
     if (this.spaces[row][col] === undefined) {
       this.spaces[row][col] = turn;
@@ -98,12 +105,11 @@
 
     this.checkForGameOver(turn);
     
-    this.dispatchEvent(new Event(Board.MOVE_EVENT));
+    this.dispatchEvent(Board.MOVE_EVENT);
 
     if (turn === Player.MARKER && !this.result) {
-      this.dispatchEvent(new Event(Board.PLAYER_MOVE_EVENT));
+      this.dispatchEvent(Board.PLAYER_MOVE_EVENT);
     }
-    
   }
   
   if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {

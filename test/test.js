@@ -1,6 +1,3 @@
-const assert = require('chai').assert;
-const Board = require('../board.js');
-
 describe('Rows', function() {
   context('when X wins', function() {
     const board = new Board([
@@ -9,7 +6,7 @@ describe('Rows', function() {
       ['O', undefined, undefined]
     ]);
     it('should return true', function() {
-      assert.equal(board.checkRows(Board.PLAYER), true);
+      chai.assert.equal(board.checkRows(Player.MARKER), true);
     });
   });
   context('when O wins', function() {
@@ -19,7 +16,7 @@ describe('Rows', function() {
       [undefined, 'X', undefined]
     ]);
     it('should return true', function() {
-      assert.equal(board.checkRows(Board.COMPUTER), true);
+      chai.assert.equal(board.checkRows(Computer.MARKER), true);
     });
   });
 });
@@ -32,7 +29,7 @@ describe('Columns', function() {
       ['O', 'X', undefined]
     ]);
     it('should return true', function() {
-      assert.equal(board.checkColumns(Board.COMPUTER), true);
+      chai.assert.equal(board.checkColumns(Computer.MARKER), true);
     });
   });
 });
@@ -45,7 +42,7 @@ describe('Diagonals', function() {
       ['O','X','O']
     ]);
     it('should return true', function() {
-      assert.equal(board.checkDiagonals(Board.COMPUTER), true);
+      chai.assert.equal(board.checkDiagonals(Computer.MARKER), true);
     });
   });
 });
@@ -58,7 +55,20 @@ describe('Board Full', function() {
       ['O', 'X', 'O']
     ]);
     it('should return false', function() {
-      assert.equal(board.boardFull(), false);
+      chai.assert.equal(board.boardFull(), false);
     });
    });
+});
+
+describe('Minmax Test', function() {
+  context('when player is about to win', function() {
+    const board = new Board([
+      ['O', 'X', 'X'],
+      [undefined, 'X', undefined],
+      [undefined, 'O', undefined]
+    ]);
+    it('should block the win', function() {
+      chai.assert.deepEqual(minmax(board, 0, Computer.MARKER, Computer.MARKER, Player.MARKER), { i: 2, j: 0 });
+    });
+  });
 });
