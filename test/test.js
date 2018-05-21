@@ -68,7 +68,7 @@ describe('Minmax Test', function() {
       [undefined, 'O', undefined]
     ]);
     it('should block the win', function() {
-      chai.assert.deepEqual(minmax(board, 0, Computer.MARKER, Computer.MARKER, Player.MARKER), { i: 2, j: 0 });
+      chai.assert.deepEqual(minmax(board, 0, Computer.MARKER), { i: 2, j: 0 });
     });
   });
 });

@@ -8,7 +8,7 @@
   Computer.MARKER = 'O';
 
   Computer.prototype.getMove = function() {
-    return minmax(this.board, 0, Computer.MARKER, Computer.MARKER, Player.MARKER);
+    return minmax(this.board, 0, Computer.MARKER);
   }
 
   Computer.prototype.makeMove = function() {
