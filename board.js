@@ -6,12 +6,17 @@
       [undefined, undefined, undefined]
     ];
     this.result = undefined;
+
+    const eventTarget = document.createTextNode(null);
+    this.addEventListener = eventTarget.addEventListener.bind(eventTarget);
+    this.removeEventListener = eventTarget.removeEventListener.bind(eventTarget);
+    this.dispatchEvent = eventTarget.dispatchEvent.bind(eventTarget);
   }
 
-  Board.PLAYER = 'X';
-  Board.COMPUTER = 'O';
   Board.TIE = 'CATSGAME';
-
+  Board.MOVE_EVENT = 'move';
+  Board.PLAYER_MOVE_EVENT = 'playerMove';
+ 
   Board.prototype.getSpaces = function() {
     return this.spaces;
   }
@@ -55,7 +60,7 @@
     return false;
   }
   
-  Board.prototype.checkForWinner = function(turn) {
+  Board.prototype.winningTests = function(turn) {
     return this.checkRows(turn) ||
            this.checkColumns(turn) ||
            this.checkDiagonals(turn);
@@ -72,98 +77,33 @@
     return true;
   }
 
-  Board.prototype.computerMove = function() {
-    return minmax(this, 0, Board.COMPUTER);
+  Board.prototype.checkForGameOver = function(turn) {
+    if (this.winningTests(turn)) {
+      this.result = turn;
+      return;
+    }
+
+    if (this.boardFull()) {
+      this.result = Board.TIE;
+      return;
+    }
   }
 
-  Board.prototype.playerMove = function(row, col) {
+  Board.prototype.move = function(turn, row, col) {
     if (this.spaces[row][col] === undefined) {
-      this.spaces[row][col] = Board.PLAYER;
+      this.spaces[row][col] = turn;
     } else {
       return;
     }
-    
-    //check if game over or computer moves
-    if (this.checkForWinner(Board.PLAYER)) {
-      this.result = Board.PLAYER;
-      return;
-    }
-    
-    if (this.boardFull()) {
-      this.result = Board.TIE;
-      return;
-    }
-    
-    const move = this.computerMove();
-    this.spaces[move.i][move.j] = Board.COMPUTER;
-    
-    if (this.checkForWinner(Board.COMPUTER)) {
-      this.result = Board.COMPUTER;
-      return;
-    }
-    
-    if (this.boardFull()) {
-      this.result = Board.TIE;
-      return;
-    }
-  }
 
-  //logic for computer AI using minmax algorithm
-  function minmax(newBoard, depth, turn) {
-    const gameOver = newBoard.checkForWinner(Board.COMPUTER) ||
-                     newBoard.checkForWinner(Board.PLAYER) ||
-                     newBoard.boardFull();
-    //if there are still moves left in the game
-    if (!gameOver) {
-      //container for possible moves with scores
-      const results = [];
-      for (var i = 0; i < 3; i++) {
-        for (var j = 0; j < 3; j++) {
-          //make copy of board to avoid altering actual board
-          const spaces = _.cloneDeep(newBoard.getSpaces());
-          if (spaces[i][j] !== undefined) continue;
-          spaces[i][j] = turn;
-          //recursive call until you reach last possible move
-          const boardCopy = new Board(spaces);
-          let result = minmax(boardCopy, depth + 1, turn === 
-                                                    Board.PLAYER ?
-                                                    Board.COMPUTER : Board.PLAYER);
-          results.push(
-            { 
-              score: result,
-              square: {
-                i: i,
-                j: j
-              }
-            }
-          );
-        }
-      }
-      //search for max result 
-      if (turn === Board.COMPUTER) {
-        const max = Math.max.apply(Math,results.map(function(ele) { return ele.score;}));
-        const maxDetails = results.find(function(ele) { return ele.score == max; });
-        if (depth === 0) {
-          return maxDetails.square;
-        } else {
-          return max;
-        }
-      } else {
-        const min = Math.min.apply(Math,results.map(function(ele) { return ele.score;}));
-        const minDetails = results.find(function(ele) { return ele.score == min; });
-        if (depth === 0) {
-          return minDetails.square;
-        } else {
-          return min;
-        }
-      }
-    } else if (newBoard.checkForWinner(Board.PLAYER)) { // <-- player won
-      return depth - 10;
-    } else if (newBoard.checkForWinner(Board.COMPUTER)) { // <-- computer won
-      return 10 - depth;
-    } else { // <-- tie
-      return 0;
-    } 
+    this.checkForGameOver(turn);
+    
+    this.dispatchEvent(new Event(Board.MOVE_EVENT));
+
+    if (turn === Player.MARKER && !this.result) {
+      this.dispatchEvent(new Event(Board.PLAYER_MOVE_EVENT));
+    }
+    
   }
   
   if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
@@ -171,7 +111,6 @@
   } else {
     window.Board = Board;
   }
-
 })();
 
 

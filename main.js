@@ -1,14 +1,16 @@
 $(document).ready(function() {
   const board = new Board();
+  const player = new Player(board);
+  const computer = new Computer(board);
 
   function showResult(result) {
     let text = "";
         
     if (result === Board.TIE) {
       text = "CAT'S GAME";
-    } else if (result === Board.COMPUTER) {
+    } else if (result === Computer.MARKER) {
       text = "OOPS! YOU LOST.";
-    } else if (result === Board.PLAYER) {
+    } else if (result === Player.MARKER) {
       text = "NOT GOING TO HAPPEN"
     }
     
@@ -18,7 +20,6 @@ $(document).ready(function() {
 
   function renderBoard(board) {
     const spaces = board.getSpaces();
-    //iterate through board to make DOM match
     for (let row = 0; row < 3; row += 1) {
       for (let col = 0; col < 3; col += 1) {
         $('.square[data-row=' + row + '][data-col=' + col + ']').html(spaces[row][col]);
@@ -30,16 +31,15 @@ $(document).ready(function() {
     }
   }
 
-  //identify which square was clicked
   $('.square').click(function() {
     const row = $(this).data('row');
     const col = $(this).data('col');
 
-    board.playerMove(row, col);
-    renderBoard(board);
+    player.move(row, col);
   });
 
-  //restart: new game
+  board.addEventListener(Board.MOVE_EVENT, renderBoard.bind(this, board));
+
   $('#restart').click(function() {
     location.reload();
   });
