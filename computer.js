@@ -6,11 +6,14 @@
   }
 
   Computer.prototype.getMove = function() {
-    return minmax(this.board, 0, this.marker);
+    return minmax(this.board, 0, this.marker, this.marker, this.marker === 'O' ? 'X' : 'O');
+  }
+
+  Computer.prototype.getMarker = function() {
+    return this.marker;
   }
 
   Computer.prototype.makeMove = function(marker) {
-    console.log('marker:', marker);
     if (marker !== this.marker) {
       const move = this.getMove();
       this.board.move(this.marker, move.i, move.j);

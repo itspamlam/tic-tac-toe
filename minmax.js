@@ -1,5 +1,5 @@
 (function(){
-  function getPossibleMoves(newBoard, depth, turn) {
+  function getPossibleMoves(newBoard, depth, turn, maximize, minimize) {
     const results = [];
     for (var i = 0; i < 3; i++) {
       for (var j = 0; j < 3; j++) {
@@ -9,8 +9,10 @@
 
         const boardCopy = new Board(spaces);
         let result = minmax(boardCopy, depth + 1, turn === 
-                                                  'X' ?
-                                                  'O' : 'X');
+                                                  minimize ?
+                                                  maximize : minimize,
+                                                  maximize,
+                                                  minimize);
         results.push(
           { 
             score: result,
@@ -35,21 +37,21 @@
     }
   }
 
-  function minmax(newBoard, depth, turn) {
-    const gameOver = newBoard.winningTests('O') ||
-                     newBoard.winningTests('X') ||
+  function minmax(newBoard, depth, turn, maximize, minimize) {
+    const gameOver = newBoard.winningTests(maximize) ||
+                     newBoard.winningTests(minimize) ||
                      newBoard.boardFull();
 
     if (!gameOver) {
-      const moves = getPossibleMoves(newBoard, depth, turn);
-      if (turn === 'O') {
+      const moves = getPossibleMoves(newBoard, depth, turn, maximize, minimize);
+      if (turn === maximize) {
         return getScore(Math.max, moves, depth);
       } else {
         return getScore(Math.min, moves, depth);
       }
-    } else if (newBoard.winningTests('X')) {
+    } else if (newBoard.winningTests(minimize)) {
       return depth - 10;
-    } else if (newBoard.winningTests('O')) {
+    } else if (newBoard.winningTests(maximize)) {
       return 10 - depth;
     } else {
       return 0;
