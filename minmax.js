@@ -9,8 +9,8 @@
 
         const boardCopy = new Board(spaces);
         let result = minmax(boardCopy, depth + 1, turn === 
-                                                  Player.MARKER ?
-                                                  Computer.MARKER : Player.MARKER);
+                                                  'X' ?
+                                                  'O' : 'X');
         results.push(
           { 
             score: result,
@@ -36,20 +36,20 @@
   }
 
   function minmax(newBoard, depth, turn) {
-    const gameOver = newBoard.winningTests(Computer.MARKER) ||
-                     newBoard.winningTests(Player.MARKER) ||
+    const gameOver = newBoard.winningTests('O') ||
+                     newBoard.winningTests('X') ||
                      newBoard.boardFull();
 
     if (!gameOver) {
       const moves = getPossibleMoves(newBoard, depth, turn);
-      if (turn === Computer.MARKER) {
+      if (turn === 'O') {
         return getScore(Math.max, moves, depth);
       } else {
         return getScore(Math.min, moves, depth);
       }
-    } else if (newBoard.winningTests(Player.MARKER)) {
+    } else if (newBoard.winningTests('X')) {
       return depth - 10;
-    } else if (newBoard.winningTests(Computer.MARKER)) {
+    } else if (newBoard.winningTests('O')) {
       return 10 - depth;
     } else {
       return 0;

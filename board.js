@@ -10,9 +10,9 @@
 
   }
 
-  Board.TIE = 'CATSGAME';
   Board.MOVE_EVENT = 'move';
-  Board.PLAYER_MOVE_EVENT = 'playerMove';
+  Board.WINNING_EVENT = 'winningMove';
+  Board.TIE_EVENT = 'catsgame';
  
   Board.prototype.getSpaces = function() {
     return this.spaces;
@@ -74,25 +74,19 @@
     return true;
   }
 
-  Board.prototype.checkForGameOver = function(turn) {
-    if (this.winningTests(turn)) {
-      this.result = turn;
-      return;
-    }
-
-    if (this.boardFull()) {
-      this.result = Board.TIE;
-      return;
-    }
-  }
-
   Board.prototype.addEventListener = function(eventName, callback) {
-    this.eventHandlers[eventName] = callback;
+    if (!this.eventHandlers[eventName]) {
+      this.eventHandlers[eventName] = [];
+    }
+
+    this.eventHandlers[eventName].push(callback);
   }
 
-  Board.prototype.dispatchEvent = function(eventName) {
+  Board.prototype.dispatchEvent = function(eventName, data) {
     if (this.eventHandlers[eventName]) {
-      this.eventHandlers[eventName]();
+      this.eventHandlers[eventName].forEach(function(handler) {
+        handler(data);
+      });
     }
   }
 
@@ -102,13 +96,13 @@
     } else {
       return;
     }
-
-    this.checkForGameOver(turn);
     
-    this.dispatchEvent(Board.MOVE_EVENT);
-
-    if (turn === Player.MARKER && !this.result) {
-      this.dispatchEvent(Board.PLAYER_MOVE_EVENT);
+    if (this.winningTests(turn)) {
+      this.dispatchEvent(Board.WINNING_EVENT, turn);
+    } else if (this.boardFull()) {
+      this.dispatchEvent(Board.TIE_EVENT);
+    } else {
+      this.dispatchEvent(Board.MOVE_EVENT, turn);
     }
   }
   
